@@ -21,10 +21,19 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       
-      - name: Create Docker Buildx builder
+      - name: Set up Buildx builder
         run: |
           docker buildx create --use --name mybuilder
           docker buildx inspect mybuilder --bootstrap
+        continue-on-error: true
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -35,3 +44,10 @@ jobs:
           tags: |
             islinhey/marker-models:${{ github.sha }}
             islinhey/marker-models:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+
+      - name: Remove Buildx builder
+        if: always()
+        run: docker buildx rm mybuilder
+        continue-on-error: true
