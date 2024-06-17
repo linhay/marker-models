@@ -18,3 +18,4 @@ jobs:
       run: docker build . --file Dockerfile --tag islinhey/marker-models:$(date +%s)
     - name: Push the Docker image
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ghcr.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+    - run: docker push islinhey/marker-models:$(date +%s)
