@@ -18,9 +18,9 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 # Copy the application code
 COPY ./loaders /loaders
-RUN python /loaders/load-models-surya_det2.py
-RUN python /loaders/load-models-surya_layout2.py
-RUN python /loaders/load-models-texify.py
-RUN python /loaders/load-models-texify2.py
-RUN python /loaders/load-models-surya_rec.py
-RUN python /loaders/load-models-surya_order.py
+RUN python /loaders/load-models-surya_det2.py \
+    && python /loaders/load-models-surya_layout2.py \
+    && python /loaders/load-models-texify.py \
+    && python /loaders/load-models-texify2.py \
+    && python /loaders/load-models-surya_rec.py \
+    && python /loaders/load-models-surya_order.py
